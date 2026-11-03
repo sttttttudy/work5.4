@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>石油勘探开发的智能化可能性地图</title>
+<meta name="description" content="按石油作业链条逐环节展示可被深度学习改造的候选场景，标注 AI 介入点、数据条件与难度等级；带可运行的案例示范。">
+
+<link rel="stylesheet" href="assets/core/tokens.css?v=20261022i">
+<link rel="stylesheet" href="assets/core/layout.css?v=20261022i">
+<link rel="stylesheet" href="assets/core/ui.css?v=20261022i">
+<link rel="stylesheet" href="assets/core/case-viz.css?v=20261024a">
+</head>
+<body>
+
+<div id="view">
+  <main class="wrap" style="padding:120px 0">
+    <div class="empty"><b>正在加载</b>如果这行字一直不消失，说明脚本没有正确执行，
+    请检查浏览器控制台。</div>
+  </main>
+</div>
+
+<noscript>
+  <div class="wrap" style="padding:80px 0">
+    <div class="empty"><b>需要启用 JavaScript</b>本站是纯前端渲染的，所有页面由本地脚本生成。</div>
+  </div>
+</noscript>
+
+<!-- =========================================================
+     加载顺序
+     1. data.js        场景元数据
+     2. registry.js    案例注册表
+     3. kit.js         渲染工具箱
+     4. _petro-viz.js  可视化工具箱（给 K.pipeline 加步骤图）
+     5. _demo-kit.js   示范脚手架（滑杆 / 指标卡 / 版式）
+     6. cases/*        案例插件
+     7. case-*         示范宿主与导入
+     8. shell.js       外壳，必须最后
+     ========================================================= -->
+<script src="assets/data.js?v=20261022i"></script>
+<script src="assets/core/registry.js?v=20261022i"></script>
+<script src="assets/core/kit.js?v=20261022i"></script>
+
+<script src="assets/cases/_petro-viz.js?v=20261024a"></script>
+<script src="assets/cases/_demo-kit.js?v=20261024a"></script>
+
+<script src="assets/cases/welllog-layer.case.js?v=20261022i"></script>
+<script src="assets/cases/welllog-layer.demo.js?v=20261022i"></script>
+
+<!-- 钻井 5 个 + 录井 5 个 -->
+<script src="assets/cases/drilling.cases.js?v=20261024a"></script>
+<script src="assets/cases/mudlog.cases.js?v=20261024a"></script>
+
+<script src="assets/core/case-demo-host.js?v=20261022i"></script>
+<script src="assets/core/case-upload.js?v=20261022i"></script>
+<script src="assets/core/admin.js?v=20261022i"></script>
+<script src="assets/core/shell.js?v=20261022i"></script>
+
+<script>
+(function () {
+  var EXP = ['drill-rop','drill-stuck','drill-trajectory','drill-fatigue','drill-mud',
+             'mudlog-cuttings','mudlog-gas','mudlog-fluor','mudlog-drtime','mudlog-report'];
+  if (!window.Cases) { console.error('[atlas] registry.js 未加载'); return; }
+  var miss = EXP.filter(function (id) { return !window.Cases.get(id); });
+  if (miss.length) {
+    console.warn('[atlas] 未注册：' + miss.join(', '));
+    console.warn('[atlas] PV=' + typeof window.PV + ' DK=' + typeof window.DK + ' K=' + typeof window.K);
+  } else {
+    console.log('%c[atlas] 10 个钻井/录井案例已就绪', 'color:#2f7d6b');
+  }
+})();
+</script>
+
+</body>
+</html>
